@@ -1,0 +1,36 @@
+---
+title: "Hello, Quarto"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+
+library(WDI)
+```
+
+```{r}
+#| label: plot-graphics
+#| warning: false
+#| echo: false
+
+# DADOS EM PAINEL
+dados <- WDI(country = 'all',
+                indicator = 'NY.ADJ.NNTY.KD.ZG')
+
+paises <- c('BR', 'US')
+
+dados <- WDI(country = paises,
+                    indicator = 'NY.ADJ.NNTY.KD.ZG')
+
+# CORTE TRANSVERSAL
+dados2023 <- WDI(country = 'all',
+                    indicator = 'NY.ADJ.NNTY.KD.ZG',
+                    start = 2023, end = 2023)
+
+# SÉRIE TEMPORAL
+dados <- WDI(country = 'BR',
+                  indicator = 'NY.ADJ.NNTY.KD.ZG')
+```
