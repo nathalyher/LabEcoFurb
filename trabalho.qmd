@@ -1,0 +1,79 @@
+---
+title: "Crescimento do Capital Fixo Líquido"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+
+library(WDI)
+library(tidyverse)
+```
+
+```{r}
+#| label: plot-graphics
+#| warning: false
+#| echo: false
+
+# DADOS EM PAINEL - BR e US
+paises <- c('BR', 'US')
+dados <- WDI(country = paises,
+             indicator = 'NY.ADJ.NNTY.KD.ZG')
+
+# Gráfico
+ggplot(dados, aes(x = year, y = NY.ADJ.NNTY.KD.ZG, color = country)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Crescimento do Capital Fixo Líquido (BR x US)",
+    x = "Ano", y = "%"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+#| label: graficocortetransversal 
+#| warning: false 
+#| echo: false
+
+# CORTE TRANSVERSAL - Ano de 2023
+dados2023 <- WDI(country = 'all',
+                 indicator = 'NY.ADJ.NNTY.KD.ZG',
+                 start = 2023, end = 2023)
+
+# Remover NAs
+dados2023 <- na.omit(dados2023)
+
+# Gráfico
+ggplot(dados2023, aes(x = reorder(country, NY.ADJ.NNTY.KD.ZG), 
+                      y = NY.ADJ.NNTY.KD.ZG)) +
+  geom_point() +
+  coord_flip() +
+  labs(
+    title = "Crescimento do Capital Fixo Líquido em 2023",
+    x = "País", y = "%"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+#| label: graficoserietemporal 
+#| warning: false 
+#| echo: false
+
+# SÉRIE TEMPORAL - Brasil
+dadosBR <- WDI(country = 'BR',
+               indicator = 'NY.ADJ.NNTY.KD.ZG')
+
+# Gráfico
+ggplot(dadosBR, aes(x = year, y = NY.ADJ.NNTY.KD.ZG)) +
+  geom_line(color = "steelblue") +
+  geom_point(color = "steelblue") +
+  labs(
+    title = "Crescimento do Capital Fixo Líquido - Brasil",
+    x = "Ano", y = "%"
+  ) +
+  theme_minimal()
+```
