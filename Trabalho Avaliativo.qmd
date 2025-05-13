@@ -1,0 +1,92 @@
+---
+title: "Crescimento do Capital Fixo Líquido"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+
+library(WDI)
+library(tidyverse)
+```
+
+Gráfico 1 – Evolução do Crescimento do Capital Fixo Líquido (2000–2023) Este gráfico apresenta a evolução do crescimento do capital fixo líquido em cinco países: Brasil (BR), Estados Unidos (US), Índia (IN), Japão (JP) e Rússia (RU), ao longo do tempo, de 2000 a 2023. Observa-se que a Índia se destacou com taxas consistentemente mais altas de crescimento do capital fixo, refletindo uma trajetória contínua de investimentos produtivos. Os Estados Unidos e o Japão apresentaram crescimento mais estável, porém em patamares moderados. O Brasil e a Rússia mostraram maior volatilidade, com períodos de crescimento e contração, indicando instabilidade nos investimentos em capital fixo nesses países.
+
+```{r}
+#| label: plot-graphics
+#| warning: false
+#| echo: false
+#Gráfico 1 – Dados em painel (vários países ao longo do tempo)
+# DADOS EM PAINEL - 'BR'
+paises <- c('BR','US','IN','JP','RU')
+dados <- WDI(country = paises,
+             indicator = 'NY.ADJ.NNTY.KD.ZG')
+
+# Gráfico
+ggplot(dados, aes(x = year, y = NY.ADJ.NNTY.KD.ZG, color = country)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Evolução do Crescimento do Capital Fixo Líquido",
+    x = "Ano", y = "%"
+  ) +
+  theme_minimal()
+```
+
+'Gráfico 2 – Crescimento do Capital Fixo Líquido em 2023 (Corte Transversal) Este gráfico compara os valores do crescimento do capital fixo líquido entre os cinco países no ano de 2023. A Índia novamente lidera com o maior percentual de crescimento, destacando-se como o país com maior dinamismo em investimentos no período. Em contraste, o Brasil e a Rússia registraram valores mais baixos, sugerindo menor renovação e ampliação de sua base produtiva no ano analisado. Os Estados Unidos e o Japão apresentaram resultados intermediários, mantendo uma trajetória de crescimento mais estável.'
+
+```{r}
+#| label: graficocortetransversal 
+#| warning: false 
+#| echo: false
+#Gráfico 2– Corte transversal em 2023
+
+# CORTE TRANSVERSAL - Ano de 2000 a 2023
+paises <- c('BR','US','IN','JP','RU')
+dados2023 <- WDI(country = paises,
+                 indicator = 'NY.ADJ.NNTY.KD.ZG',
+                 start = 2000, end = 2023)
+
+# Remover NAs
+dados2023 <- na.omit(dados2023)
+
+# Gráfico
+ggplot(dados2023, aes(x = reorder(country, NY.ADJ.NNTY.KD.ZG), 
+                      y = NY.ADJ.NNTY.KD.ZG)) +
+  geom_col(fill = "steelblue") +
+  geom_hline(yintercept = 0, color = "black") +
+  labs(title="Crescimento do Capital Fixo Líquido em 2023 –Comparação entre pais",
+  x = "País", y = "%" ) +
+  theme_minimal()
+```
+
+Gráfico 3 – Série Histórica do Crescimento do Capital Fixo Líquido no Brasil (2000–2023) Este gráfico mostra a evolução específica do Brasil ao longo dos anos. Nota-se uma grande oscilação nas taxas de crescimento, com períodos de forte expansão intercalados com quedas significativas, especialmente após crises econômicas ou instabilidade política. Isso evidencia a sensibilidade dos investimentos fixos brasileiros a fatores macroeconômicos internos e externos, o que compromete a previsibilidade e sustentabilidade do crescimento de longo prazo.'
+
+```{r}
+#| label: graficoserietemporal 
+#| warning: false 
+#| echo: false
+#Gráfico 3– Série temporal do Brasil
+# SÉRIE TEMPORAL - Brasil
+dadosBR <- WDI(country = 'BR',
+               indicator = 'NY.ADJ.NNTY.KD.ZG')
+# Gráfico
+ggplot(dadosBR, aes(x = year, y = NY.ADJ.NNTY.KD.ZG)) +
+  geom_line(color = "steelblue") +
+  geom_point(color = "steelblue") +
+  labs(
+    title = "Série Histórica do Crescimento do Capital Fixo Líquido no Brasil (2000–2023)",
+    x = "Ano", y = "%"
+  ) +
+  theme_minimal()
+
+
+```
+
+------------------------------------------------------------------------
+
+### **Conclusão**
+
+A análise conjunta dos gráficos indica que o crescimento do capital fixo líquido varia significativamente entre os países analisados. A Índia mostra um padrão de crescimento consistente e robusto, enquanto o Brasil apresenta grande instabilidade e desempenho mais fraco, especialmente nos anos recentes. Essa volatilidade sugere a necessidade de políticas econômicas mais eficazes e estáveis para fomentar o investimento produtivo no país. A comparação internacional destaca a importância da previsibilidade econômica e de um ambiente favorável ao investimento para sustentar o crescimento do capital fixo ao longo do tempo.
