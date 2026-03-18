@@ -1,1 +1,33 @@
-ssss
+# ----- Estados do Brasil -----
+estados <- c("AC","AL","AP","AM","BA","CE","DF","ES","GO","MA",
+             "MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN",
+             "RS","RO","RR","SC","SP","SE","TO")
+
+# ----- Dados simulados para 2020 (corte transversal) -----
+set.seed(123)  # para reproducibilidade
+admissoes <- sample(500:5000, 27, replace = TRUE)
+demissoes <- sample(300:4000, 27, replace = TRUE)
+
+# Criando data frame
+bd <- data.frame(Estado = estados, Adm = admissoes, Dem = demissoes)
+
+# ----- Estimando modelo linear simples (Adm ~ Dem) -----
+mod <- lm(Adm ~ Dem, data = bd)
+summary(mod)
+options(scipen = 999)
+
+# ----- Gráficos lado a lado -----
+par(mfrow = c(1, 2))  # 1 linha, 2 colunas
+
+# Gráfico de Admissões
+barplot(bd$Adm, names.arg = bd$Estado, col = "steelblue",
+        main = "Admissões por Estado (2020)",
+        xlab = "Estados", ylab = "Quantidade", las=2)
+
+# Gráfico de Demissões
+barplot(bd$Dem, names.arg = bd$Estado, col = "lightblue",
+        main = "Demissões por Estado (2020)",
+        xlab = "Estados", ylab = "Quantidade", las=2)
+
+# Voltar ao layout normal
+par(mfrow = c(1, 1))
